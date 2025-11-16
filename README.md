@@ -1,4 +1,4 @@
 # Установка зависимостей
-## npm install
+``` npm install ```
 # Запуск проекта
-## npm run dev
+``` npm run dev ```
