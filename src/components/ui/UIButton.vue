@@ -1,6 +1,17 @@
 <template>
-  <button 
-    :class="['btn', type === 'primary' ? 'btn-primary' : type === 'secondary' ? 'btn-secondary' : type === 'danger' ? 'btn-danger' : 'btn-outlined']"
+  <button
+    :class="[
+      'btn',
+      type === 'primary'
+        ? 'btn-primary'
+        : type === 'secondary'
+          ? 'btn-secondary'
+          : type === 'danger'
+            ? 'btn-danger'
+            : type === 'outlined'
+              ? 'btn-outlined'
+              : 'btn-retry',
+    ]"
     :disabled="disabled"
   >
     {{ props.buttonText }}
@@ -8,69 +19,75 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
-  buttonText?: string
-  disabled?: boolean
-  type?: 'primary' | 'secondary' | 'danger' | 'outlined'
-}
+  interface Props {
+    buttonText?: string;
+    disabled?: boolean;
+    type?: 'primary' | 'secondary' | 'danger' | 'outlined' | 'retry';
+  }
 
-const props = withDefaults(defineProps<Props>(), {
-  buttonText: 'Кнопка',
-  disabled: false,
-  type: 'primary'
-})
+  const props = withDefaults(defineProps<Props>(), {
+    buttonText: 'Кнопка',
+    disabled: false,
+    type: 'primary',
+  });
 </script>
 
 <style scoped>
-.btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s;
-}
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
-.btn-primary {
-  background: #4CAF50;
-  color: white;
-}
+  .btn-primary {
+    background: #4caf50;
+    color: white;
+  }
 
-.btn-primary:hover:not(:disabled) {
-  background: #45a049;
-}
+  .btn-primary:hover:not(:disabled) {
+    background: #45a049;
+  }
 
-.btn-secondary {
-  background: #2196F3;
-  color: white;
-}
+  .btn-secondary {
+    background: #2196f3;
+    color: white;
+  }
 
-.btn-secondary:hover:not(:disabled) {
-  background: #0b7dda;
-}
+  .btn-secondary:hover:not(:disabled) {
+    background: #0b7dda;
+  }
 
-.btn-danger {
-  background: #f44336;
-  color: white;
-}
+  .btn-danger {
+    background: #f44336;
+    color: white;
+  }
 
-.btn-danger:hover:not(:disabled) {
-  background: #da190b;
-}
-.btn-outlined {
-  background: white;
-  color: black;
-  border: 1px solid #ddd;
-  transition: all 0.3s;
-  
-}
-.btn-outlined:hover:not(:disabled) {
-  background: #f0f0f0;
-}
+  .btn-danger:hover:not(:disabled) {
+    background: #da190b;
+  }
+  .btn-retry {
+    background: #c62828;
+    color: white;
+  }
+  .btn-retry:hover:not(:disabled) {
+    background: #c63c3c;
+  }
+  .btn-outlined {
+    background: white;
+    color: black;
+    border: 1px solid #ddd;
+    transition: all 0.3s;
+  }
+  .btn-outlined:hover:not(:disabled) {
+    background: #f0f0f0;
+  }
 </style>

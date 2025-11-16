@@ -12,115 +12,89 @@
     </div>
     <div class="filter-group">
       <label>Дата регистрации:</label>
-      <UIDateInput
-        v-model="dateFrom"
-        @input="handleInputDateFrom"
-      />
-      <!-- <input
-        v-model="dateFrom"
-        type="date"
-        class="date-input"
-        @input="handleInputDateFrom"
-      /> -->
+      <UIDateInput :modelValue="dateFrom" @input="handleInputDateFrom($event)" />
       <span>-</span>
-      <UIDateInput
-        v-model="dateTo"
-        @input="handleInputDateTo"
-      />
-      <!-- <input
-        v-model="dateTo"
-        type="date"
-        class="date-input"
-        @input="handleInputDateTo"
-      /> -->
-      <!-- <button 
+      <UIDateInput :modelValue="dateTo" @input="handleInputDateTo($event)" />
+      <UIButton
+        type="outlined"
+        button-text="Очистить"
+        :disabled="dateFrom === '' && dateTo === ''"
         @click="clearDateFilter"
-        class="btn-clear"
-      >
-        Очистить
-      </button> -->
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue'
-import UIButton from './ui/UIButton.vue'
-import UIDateInput from './ui/UIDateInput.vue'
+  import type { filterButton } from '../types.ts';
+  import UIButton from './ui/UIButton.vue';
+  import UIDateInput from './ui/UIDateInput.vue';
 
-interface filterButton {
-  name: string
-  value: string
-}
-interface Props {
-  filterButtons: filterButton[]
-  resetFilters: boolean
-}
+  interface Props {
+    filterButtons: filterButton[];
+    filterStatus: string;
+    dateFrom: string;
+    dateTo: string;
+  }
 
-const props = withDefaults(defineProps<Props>(), {
-  filterButtons: () => [
-    {name: 'btn1', value: 'Кнопка1'},
-    {name: 'btn2', value: 'Кнопка2'},
-    {name: 'btn3', value: 'Кнопка3'},
-  ],
-  resetFilters: false
-})
+  withDefaults(defineProps<Props>(), {
+    filterButtons: () => [
+      { name: 'btn1', value: 'Кнопка1' },
+      { name: 'btn2', value: 'Кнопка2' },
+      { name: 'btn3', value: 'Кнопка3' },
+    ],
+    filterStatus: '',
+    dateFrom: '',
+    dateTo: '',
+  });
 
-const filterStatus = ref<string>('')
-const dateFrom = ref<string>('')
-const dateTo = ref<string>('')
+  const emit = defineEmits<{
+    (e: 'click-filter-status', value: string): void;
+    (e: 'input-date-from', value: string): void;
+    (e: 'input-date-to', value: string): void;
+    (e: 'clear-all-input-date'): void;
+  }>();
 
-const emit = defineEmits<{
-  (e: 'click-filter-status', value: string): void
-  (e: 'input-date-from', value: string): void
-  (e: 'input-date-to', value: string): void
-}>()
+  const handleClickFilterStatus = (event: string) => {
+    emit('click-filter-status', event);
+  };
 
-const handleClickFilterStatus = (status: string) => {
-  filterStatus.value = status
-  emit('click-filter-status', filterStatus.value)
-}
-const handleInputDateFrom = (value: string) => {
-  dateFrom.value = value
-  emit('input-date-from', dateFrom.value)
-}
-const handleInputDateTo = (value: string) => {
-  dateTo.value = value
-  emit('input-date-to', dateTo.value)
-}
-watch(() => [props.resetFilters], (val) => {
-  if (!val) return
-  console.log('props.resetFilters: ', props.resetFilters);
-  filterStatus.value = ''
-  dateFrom.value = ''
-  dateTo.value = ''
-}, { deep: true })
+  const handleInputDateFrom = (event: string) => {
+    emit('input-date-from', event);
+  };
 
+  const handleInputDateTo = (event: string) => {
+    emit('input-date-to', event);
+  };
+
+  const clearDateFilter = () => {
+    emit('clear-all-input-date');
+  };
 </script>
 
 <style scoped>
-.filters-section {
-  background: white;
-  padding: 15px 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+  .filters-section {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-.filter-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
 
-.filter-group:last-child {
-  margin-bottom: 0;
-}
+  .filter-group:last-child {
+    margin-bottom: 0;
+  }
 
-.filter-group label {
-  font-weight: 500;
-  color: #555;
-  min-width: 150px;
-}
+  .filter-group label {
+    font-weight: 500;
+    color: #555;
+    min-width: 150px;
+  }
 </style>
